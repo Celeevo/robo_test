@@ -17,10 +17,10 @@ class JuniorStrat(bt.Strategy):
         if not self.isLive:
             return
 
-        logger.info("Мы в NEXT()")
+        print("Мы в NEXT()")
 
-        logger.info(
-        # print(
+        # logger.info(
+        print(
             f'LIVE-D-T-O-H-L-C-V-MA: {self.isLive}, {bt.num2date(self.data.datetime[0])}, '
             f'{self.data.open[0]}, {self.data.high[0]}, {self.data.low[0]}, '
             f'{self.data.close[0]}, {self.data.volume[0]}, {self.ma[0] = }')
