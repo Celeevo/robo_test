@@ -44,8 +44,8 @@ class QKData(with_metaclass(MetaQKData, AbstractDataBase)):
         self.tf = self.bt_timeframe_to_tf(self.p.timeframe, self.p.compression)  # Конвертируем временной интервал из BackTrader для имени файла истории и расписания
         self.file = f'{self.class_code}.{self.sec_code}_{self.tf}'  # Имя файла истории
         self.logger = logging.getLogger(f'QKData.{self.file}')  # Будем вести лог
-        # self.file_name = f'{self.datapath}{self.file}.txt'  # Полное имя файла истории
-        self.file_name = f'{self.file}.txt'  # Полное имя файла истории
+        self.file_name = f'{self.datapath}{self.file}.txt'  # Полное имя файла истории
+        os.makedirs(os.path.dirname(self.file_name), exist_ok=True)
         self.history_bars = []  # Исторические бары из файла и истории после проверки на соответствие условиям выборки
         self.guid = None  # Идентификатор подписки/расписания на историю цен
         self.exit_event = Event()  # Определяем событие выхода из потока
