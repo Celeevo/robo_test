@@ -53,7 +53,8 @@ def get_candles_from_QUIK(qp_provider, class_code, sec, tf) -> None:
 
 
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
+    print(f'Тест интеграции QUIK и Python, время: {datetime.now():%d.%m.%y %H:%M:%S}')
     qp_provider = QuikPy()  # Подключение к локальному запущенному терминалу QUIK
     class_code = 'QJSIM'    # 'QJSIM' используется в демо-QUIK - это аналог TQBR в обычном QUIK 
     sec = 'SBER'           # 'SPBFUT' 'MXM5'
