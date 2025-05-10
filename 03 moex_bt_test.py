@@ -8,7 +8,7 @@ from moex_store import MoexStore
 # import datetime
 
 def runstrat():
-    contracts = ['EuM5',]
+    # contracts = ['EuM5',]
     contracts = ['SBER',]
     datas = []
     for sec_id in contracts:
