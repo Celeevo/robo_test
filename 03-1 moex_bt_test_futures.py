@@ -1,18 +1,17 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-from datetime import datetime, timedelta
 import backtrader as bt
 from moex_store import MoexStore
 
 def main():
     tf = '30m'
-    contracts = ['SBER', 'GAZP']
+    contracts = ['EuM4', 'SiU3']
     datas = []
     store = MoexStore()
 
     for sec_id in contracts:
-        fromdate = datetime.today() - timedelta(days=30)
-        todate = datetime.today()
+        fromdate = store.futures.prevexpdate(sec_id)
+        todate = store.futures.expdate(sec_id)
         datas.append(store.getdata(sec_id=sec_id,
                              fromdate=fromdate,
                              todate=todate,
