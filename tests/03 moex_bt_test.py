@@ -10,6 +10,7 @@ def main():
     datas = []
     store = MoexStore()
 
+
     for sec_id in contracts:
         fromdate = datetime.today() - timedelta(days=30)
         todate = datetime.today()
