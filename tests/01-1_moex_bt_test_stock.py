@@ -9,7 +9,7 @@ def main():
     contracts = ['SBER', 'GAZP']
     datas = []
     store = MoexStore()
-
+    cerebro = bt.Cerebro()
 
     for sec_id in contracts:
         fromdate = datetime.today() - timedelta(days=30)
@@ -20,7 +20,6 @@ def main():
                              tf=tf,
                              name=sec_id))
 
-    cerebro = bt.Cerebro()
     for data in datas:
          cerebro.adddata(data)
     cerebro.run()
