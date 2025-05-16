@@ -5,7 +5,7 @@ import backtrader as bt
 from moex_store import MoexStore
 
 def main():
-    tf = '30m'
+    tf = '1h'
     stocks = ['SBER', 'GAZP']
     datas = []
     store = MoexStore()
