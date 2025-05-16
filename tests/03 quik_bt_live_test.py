@@ -21,6 +21,8 @@ class JuniorStrat(bt.Strategy):
             f'{self.data.open[0]}, {self.data.high[0]}, {self.data.low[0]}, '
             f'{self.data.close[0]}, {self.data.volume[0]}')
 
+        logger.info(f'Позиция: {self.getposition()}')
+
     def notify_data(self, data, status, *args, **kwargs):
         """Изменение статуса приходящих баров"""
         data_status = data._getstatusname(status)
@@ -33,8 +35,8 @@ class JuniorStrat(bt.Strategy):
 def main():
     print(f'Тест интеграции QUIK и Backtrader, время: {datetime.now():%d.%m.%y %H:%M:%S}')
 
-    dataname = 'QJSIM.SBER'
-    # dataname = 'SPBFUT.MXM5'
+    # dataname = 'QJSIM.SBER'
+    dataname = 'SPBFUT.MXM5'
 
     cerebro = bt.Cerebro(stdstats=False, quicknotify=True)
     store = QKStore()

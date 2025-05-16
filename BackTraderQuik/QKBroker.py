@@ -158,7 +158,7 @@ class QKBroker(with_metaclass(MetaQKBroker, BrokerBase)):
     def get_all_active_positions(self):
         """Все активные позиции"""
         for account in self.store.provider.accounts:  # Пробегаемся по всем счетам (Коды клиента/Фирма/Счет)
-            if account['futures']:  # Для фьючерсов
+            if account['futures'] or 'SPBFUT' in account['class_codes']:  # Для фьючерсов
                 active_futures_holdings = [futures_holding for futures_holding in self.store.provider.get_futures_holdings()['data'] if futures_holding['totalnet'] != 0]  # Активные фьючерсные позиции
                 for active_futures_holding in active_futures_holdings:  # Пробегаемся по всем активным фьючерсным позициям
                     class_code = 'SPBFUT'  # Код режима торгов для фьючерсов
