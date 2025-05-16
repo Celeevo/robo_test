@@ -14,11 +14,12 @@ def main():
     for sec in stocks:
         fromdate = datetime.today() - timedelta(days=30)
         todate = datetime.today()
-        datas.append(store.getdata(sec_id=sec,
+        data_feed = store.getdata(sec_id=sec,
                              fromdate=fromdate,
                              todate=todate,
                              tf=tf,
-                             name=sec))
+                             name=sec)
+        datas.append(data_feed)
 
     for data in datas:
          cerebro.adddata(data)
