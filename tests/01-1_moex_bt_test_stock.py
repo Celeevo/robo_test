@@ -6,19 +6,19 @@ from moex_store import MoexStore
 
 def main():
     tf = '30m'
-    contracts = ['SBER', 'GAZP']
+    stocks = ['SBER', 'GAZP']
     datas = []
     store = MoexStore()
     cerebro = bt.Cerebro()
 
-    for sec_id in contracts:
+    for sec in stocks:
         fromdate = datetime.today() - timedelta(days=30)
         todate = datetime.today()
-        datas.append(store.getdata(sec_id=sec_id,
+        datas.append(store.getdata(sec_id=sec,
                              fromdate=fromdate,
                              todate=todate,
                              tf=tf,
-                             name=sec_id))
+                             name=sec))
 
     for data in datas:
          cerebro.adddata(data)
