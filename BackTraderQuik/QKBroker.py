@@ -77,7 +77,8 @@ class QKBroker(with_metaclass(MetaQKBroker, BrokerBase)):
                     futures_limit = self.store.provider.get_futures_limit(account['firm_id'], account['trade_account_id'], 0, self.store.provider.currency)['data']  # Фьючерсные лимиты по денежным средствам (limit_type=0)
                     cash += futures_limit['cbplimit'] + futures_limit['varmargin'] + futures_limit['accruedint']  # Добавляем свободные средства = Лимит откр.поз. + Вариац.маржа + Накоплен.доход
                 except Exception:  # При ошибке Futures limit returns nil
-                    self.logger.error(f'getcash: QUIK не вернул фьючерсные лимиты с firm_id={account["firm_id"]}, trade_account_id={account["trade_account_id"]}. Проверьте правильность значений')
+                    pass
+                    # self.logger.error(f'getcash: QUIK не вернул фьючерсные лимиты с firm_id={account["firm_id"]}, trade_account_id={account["trade_account_id"]}. Проверьте правильность значений')
             else:  # Для остальных фирм
                 current_balance = next((money_limit['currentbal'] for money_limit in money_limits  # Из всех денежных лимитов
                                        if money_limit['client_code'] == account['client_code'] and  # выбираем по коду клиента
@@ -157,8 +158,9 @@ class QKBroker(with_metaclass(MetaQKBroker, BrokerBase)):
 
     def get_all_active_positions(self):
         """Все активные позиции"""
+        print(f'{self.store.provider.accounts = }')
         for account in self.store.provider.accounts:  # Пробегаемся по всем счетам (Коды клиента/Фирма/Счет)
-            if account['futures'] or 'SPBFUT' in account['class_codes']:  # Для фьючерсов
+            if account['futures']:  # Для фьючерсов
                 active_futures_holdings = [futures_holding for futures_holding in self.store.provider.get_futures_holdings()['data'] if futures_holding['totalnet'] != 0]  # Активные фьючерсные позиции
                 for active_futures_holding in active_futures_holdings:  # Пробегаемся по всем активным фьючерсным позициям
                     class_code = 'SPBFUT'  # Код режима торгов для фьючерсов
@@ -174,16 +176,19 @@ class QKBroker(with_metaclass(MetaQKBroker, BrokerBase)):
                 account_depo_limits = [depo_limit for depo_limit in depo_limits  # Бумажный лимит
                                        if depo_limit['client_code'] == account['client_code'] and  # выбираем по коду клиента
                                        depo_limit['firmid'] == account['firm_id'] and  # фирме
-                                       depo_limit['limit_kind'] == self.store.provider.limit_kind and  # дню лимита
+                                       # depo_limit['limit_kind'] == self.store.provider.limit_kind and  # дню лимита
                                        depo_limit['currentbal'] != 0]  # только открытые позиции
+                print(f'{account_depo_limits = }')
                 for firm_kind_depo_limit in account_depo_limits:  # Пробегаемся по всем позициям
                     class_code, sec_code = self.store.provider.dataname_to_class_sec_codes(firm_kind_depo_limit['sec_code'])  # По коду тикера без кода режима торгов получаем код режима торгов и тикера
                     size = int(firm_kind_depo_limit['currentbal'])  # Кол-во
+                    print(class_code, sec_code, size)
                     if self.p.lots:  # Если входящий остаток в лотах
                         size = self.store.provider.lots_to_size(class_code, sec_code, size)  # то переводим кол-во из лотов в штуки
                     price = self.store.provider.quik_price_to_price(class_code, sec_code, float(firm_kind_depo_limit['wa_position_price']))  # Переводим средневзвешенную цену приобретения позиции (входа) в цену в рублях за штуку
                     dataname = self.store.provider.class_sec_codes_to_dataname(class_code, sec_code)  # Получаем название тикера по коду режима торгов и тикера
                     self.positions[dataname] = Position(size, price)  # Сохраняем в списке открытых позиций
+                    print(dataname, price, size)
 
     def create_order(self, owner, data, size, price=None, plimit=None, exectype=None, valid=None, oco=None, parent=None, transmit=True, is_buy=True, **kwargs):
         """Создание заявки. Привязка параметров счета и тикера. Обработка связанных и родительской/дочерних заявок"""

@@ -17,7 +17,8 @@ class QuikPy:
     tz_msk = timezone('Europe/Moscow')  # QUIK работает по московскому времени
     currency = 'SUR'  # Суммы будем получать в рублях
     limit_kind = 1  # Основной режим торгов T1
-    futures_firm_id = 'SPBFUT'  # Код фирмы для срочного рынка. Если ваш брокер поставил другую фирму для срочного рынка, то измените ее
+    # futures_firm_id = 'SPBFUT'  # Код фирмы для срочного рынка. Если ваш брокер поставил другую фирму для срочного рынка, то измените ее
+    futures_firm_id = 'SPBFUT000000'  # Код фирмы для срочного рынка. Если ваш брокер поставил другую фирму для срочного рынка, то измените ее
     logger = logging.getLogger('QuikPy')  # Будем вести лог
 
     def __init__(self, host='127.0.0.1', requests_port=34130, callbacks_port=34131):
@@ -976,6 +977,7 @@ class QuikPy:
             sec_code = dataname  # Код тикера
             class_codes = self.get_classes_list()['data']  # Все режимы торгов через запятую
             class_code = self.get_security_class(class_codes, sec_code)['data']  # Код режима торгов из всех режимов по тикеру
+            print(f'{class_codes = }')
         return class_code, sec_code
 
     @staticmethod
